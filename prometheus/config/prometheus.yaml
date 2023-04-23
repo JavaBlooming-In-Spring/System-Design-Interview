@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 15s     # scrap target의 기본 interval을 15초로 변경 / default = 1m
+  scrape_timeout: 15s      # scrap request 가 timeout 나는 길이 / default = 10s
+  evaluation_interval: 2m  # rule 을 얼마나 빈번하게 검증하는지 / default = 1m
+
+  external_labels:
+    monitor: 'blooming-monitor'       # 기본적으로 붙여줄 라벨
+  query_log_file: query_log_file.log # prometheus의 쿼리 로그들을 기록, 없으면 기록안함
+
+rule_files:
+  - "rule.yml"  # 파일 위치는 prometheus.yml 이 있는 곳과 동일 위치
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets:
+          - "localhost:9090"
+  - job_name: "springboot"
+    metrics_path: "/actuator/prometheus"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - "host.docker.internal:8080"

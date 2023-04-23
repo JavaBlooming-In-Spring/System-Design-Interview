@@ -18,6 +18,33 @@ services:
     networks:
       - monitoring-net
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/config:/etc/prometheus
+      - ./prometheus/volume:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--web.enable-lifecycle' # api 재시작없이 설정파일들을 reload 할 수 있게 해줌
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+    restart: always
+    networks:
+      - monitoring-net
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    # user: "$GRA_UID:$GRA_GID"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/volume:/var/lib/grafana
+    restart: always
+    networks:
+      - monitoring-net
+
 networks:
   monitoring-net:
     driver: bridge
