@@ -1,13 +1,23 @@
 version: "3"
 services:
   app:
-    container_name: interview-app
-    image: openjdk:17-alpine
-    platform: linux/amd64
+    container_name: app
+    image: arm64v8/amazoncorretto:17-alpine-jdk
     ports:
-      - "8082:8080"
+      - "8080:8080"
     volumes:
-      - ./:/app
+      - ./src:/app/src
+      - ./gradle:/app/gradle
+      - ./build.gradle:/app/build.gradle
+      - ./gradlew:/app/gradlew
+      - ./gradlew.bat:/app/gradlew.bat
+      - ./settings.gradle:/app/settings.gradle
     working_dir: /app
     command: [ "./gradlew", "bootrun" ]
     restart: always
+    networks:
+      - monitoring-net
+
+networks:
+  monitoring-net:
+    driver: bridge
