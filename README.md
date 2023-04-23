@@ -20,8 +20,19 @@ grafana 접속 방법
 
 ```markdown
 http://localhost:3000/
-http://localhost:3000/d/YGgipwEVk/jvm-micrometer
 
-아이디 / 비밀번호
+## 아이디 / 비밀번호
+
 admin / admin
+
+## Datasource 추가
+
+좌측 톱니바퀴 - Data source - Prometheus 클릭
+URL에 http://prometheus:9090 입력 후 "Save & Test"
+
+## JVM Dashboard 추가
+
+좌측 Dashboard - Import - 아래 url 입력 후 Load
+https://grafana.com/grafana/dashboards/4701-jvm-micrometer/
+이 후 Datasource에 Prometheus 선택하고 Import
 ```

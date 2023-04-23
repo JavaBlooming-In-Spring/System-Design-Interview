@@ -11,3 +11,4 @@ target/
 .gradle/
 prometheus/config/**.log
 prometheus/volume/data/
+grafana/
