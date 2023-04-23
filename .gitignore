@@ -9,3 +9,6 @@ projectName.iml
 /local.properties
 target/
 .gradle/
+
+# IntelliJ
+out/
