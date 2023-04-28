@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: interview_app
+server:
+  port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+  metrics:
+    tags:
+      application: ${spring.application.name} # 서비스 단위의 식별자. Prometheus label에 추가됨
+logging:
+  level:
+    reactor:
+      netty:
+        http:
+          client:
+            HttpClient: OFF

@@ -1,11 +1,5 @@
 spring:
   application:
-    name: interview_app
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "prometheus"
-  metrics:
-    tags:
-      application: ${spring.application.name} # 서비스 단위의 식별자. Prometheus label에 추가됨
+    name: traffic_generator
+server:
+  port: 8081

@@ -10,7 +10,6 @@ public class TestController {
 
     @GetMapping("/test")
     public String test() {
-        log.info("하위");
         return "test";
     }
 }

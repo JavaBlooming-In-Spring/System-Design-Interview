@@ -6,7 +6,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./src:/app/src
+      - ./src/main:/app/src/main
+      - ./docker/config/application.yaml:/app/src/main/resources/application.yaml
       - ./gradle:/app/gradle
       - ./build.gradle:/app/build.gradle
       - ./gradlew:/app/gradlew
