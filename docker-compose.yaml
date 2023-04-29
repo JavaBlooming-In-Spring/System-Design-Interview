@@ -1,13 +1,40 @@
 version: "3"
 services:
   app:
-    container_name: interview-app
-    image: openjdk:17-alpine
-    platform: linux/amd64
+    build: .
+    container_name: interview
     ports:
       - "8082:8080"
-    volumes:
-      - ./:/app
-    working_dir: /app
-    command: [ "./gradlew", "bootrun" ]
     restart: always
+    networks:
+      - monitoring-network
+
+  prometheus:
+    container_name: prometheus
+    build:
+      context: ./prometheus
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    restart: always
+    networks:
+      - monitoring-network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-volume:/var/lib/grafana
+    restart: always
+    networks:
+      - monitoring-network
+
+networks:
+  monitoring-network:
+    driver: bridge
+
+volumes:
+  grafana-volume:
+    driver: local
