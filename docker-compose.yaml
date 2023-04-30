@@ -1,13 +1,42 @@
 version: "3"
 services:
-  app:
-    container_name: interview-app
-    image: openjdk:17-alpine
-    platform: linux/amd64
-    ports:
-      - "8082:8080"
+#  app:
+#    container_name: app
+#    image: arm64v8/amazoncorretto:17-alpine-jdk
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./src:/app/src
+#      - ./gradle:/app/gradle
+#      - ./build.gradle:/app/build.gradle
+#      - ./gradlew:/app/gradlew
+#      - ./gradlew.bat:/app/gradlew.bat
+#      - ./settings.gradle:/app/settings.gradle
+#    working_dir: /app
+#    command: [ "./gradlew", "bootrun" ]
+#    restart: always
+    
+  prometheus:
+    image: prom/prometheus:v2.37.6
+    container_name: prometheus
     volumes:
-      - ./:/app
-    working_dir: /app
-    command: [ "./gradlew", "bootrun" ]
+      - ./prometheus/config:/etc/prometheus
+      - ./prometheus/volume:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--web.enable-lifecycle' # api 재시작없이 설정파일들을 reload 할 수 있게 해줌
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    restart: always
+    
+  grafana:
+    image: grafana/grafana:9.4.7
+    container_name: grafana
+    # user: "$GRA_UID:$GRA_GID"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/volume:/var/lib/grafana
     restart: always

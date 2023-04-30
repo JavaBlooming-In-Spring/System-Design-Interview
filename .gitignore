@@ -9,3 +9,13 @@ projectName.iml
 /local.properties
 target/
 .gradle/
+
+# IntelliJ
+out/
+
+# prometheus
+prometheus/config/**.log
+prometheus/volume/data/
+
+# grafana
+grafana/
