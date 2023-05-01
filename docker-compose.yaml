@@ -1,14 +1,7 @@
 version: "3"
 services:
   app:
-    container_name: app
     image: arm64v8/amazoncorretto:17-alpine-jdk
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/interview?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      SPRING_DATASOURCE_USERNAME: interview
-      SPRING_DATASOURCE_PASSWORD: 1234
     volumes:
       - ./src:/app/src
       - ./gradle:/app/gradle
@@ -18,45 +11,66 @@ services:
       - ./settings.gradle:/app/settings.gradle
     working_dir: /app
     command: [ "./gradlew", "bootrun" ]
-    depends_on:
-      - db
     restart: always
+    expose:
+      - "8080"
 
-  db:
-    container_name: db
-    image: mysql:8.0.33
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://my-mysql:3306/mydb
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "123"
+    depends_on:
+      - my-mysql
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    ports:
+      - "80:80"
+
+  my-mysql:
+    container_name: my-mysql
+    image: arm64v8/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "123"
+      MYSQL_DATABASE: "mydb"
     ports:
       - "3307:3306"
-    environment:
-      MYSQL_DATABASE: interview
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_USER: interview
-      MYSQL_PASSWORD: 1234
-    volumes:
-      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
 
-#  prometheus:
-#    image: prom/prometheus:v2.37.6
-#    container_name: prometheus
-#    volumes:
-#      - ./prometheus/config:/etc/prometheus
-#      - ./prometheus/volume:/prometheus
-#    ports:
-#      - "9090:9090"
-#    command:
-#      - '--web.enable-lifecycle' # api 재시작없이 설정파일들을 reload 할 수 있게 해줌
-#      - '--config.file=/etc/prometheus/prometheus.yaml'
-#      - '--web.console.libraries=/etc/prometheus/console_libraries'
-#      - '--web.console.templates=/etc/prometheus/consoles'
-#    restart: always
-#
-#  grafana:
-#    image: grafana/grafana:9.4.7
-#    container_name: grafana
-#    # user: "$GRA_UID:$GRA_GID"
-#    ports:
-#      - "3000:3000"
-#    volumes:
-#      - ./grafana/volume:/var/lib/grafana
-#    restart: always
+  mysqld-exporter:
+    image: quay.io/prometheus/mysqld-exporter
+    container_name: mysqld-exporter
+    environment:
+      - DATA_SOURCE_NAME=root:123@(my-mysql:3306)/mydb
+    ports:
+      - "9104:9104"
+    links:
+      - my-mysql
+    depends_on:
+      - my-mysql
+
+  prometheus:
+    image: prom/prometheus:v2.37.6
+    container_name: prometheus
+    volumes:
+      - ./prometheus/config:/etc/prometheus
+      - ./prometheus/volume:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--web.enable-lifecycle' # api 재시작없이 설정파일들을 reload 할 수 있게 해줌
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    restart: always
+
+  grafana:
+    image: grafana/grafana:9.4.7
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/volume:/var/lib/grafana
+    restart: always

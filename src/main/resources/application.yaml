@@ -1,20 +1,20 @@
 spring:
   application:
     name: interview_app
-
   datasource:
+    url: jdbc:mysql://localhost:3307/mydb
+    username: root
+    password: 123
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${SPRING_DATABASE_URL}
-    username: ${SPRING_DATABASE_USERNAME}
-    password: ${SPRING_DATABASE_PASSWORD}
 
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
-        format_sql: true
+
 
 management:
   endpoints:
