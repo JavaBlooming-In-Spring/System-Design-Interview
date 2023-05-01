@@ -1,20 +1,37 @@
 version: "3"
 services:
-#  app:
-#    container_name: app
-#    image: arm64v8/amazoncorretto:17-alpine-jdk
-#    ports:
-#      - "8080:8080"
-#    volumes:
-#      - ./src:/app/src
-#      - ./gradle:/app/gradle
-#      - ./build.gradle:/app/build.gradle
-#      - ./gradlew:/app/gradlew
-#      - ./gradlew.bat:/app/gradlew.bat
-#      - ./settings.gradle:/app/settings.gradle
-#    working_dir: /app
-#    command: [ "./gradlew", "bootrun" ]
-#    restart: always
+  app:
+    container_name: app
+    image: arm64v8/amazoncorretto:17-alpine-jdk
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src:/app/src
+      - ./gradle:/app/gradle
+      - ./build.gradle:/app/build.gradle
+      - ./gradlew:/app/gradlew
+      - ./gradlew.bat:/app/gradlew.bat
+      - ./settings.gradle:/app/settings.gradle
+    working_dir: /app
+    command: [ "./gradlew", "bootrun" ]
+    restart: always
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://my-mysql:3306/mydb
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "123"
+    depends_on:
+      - my-mysql
+
+  my-mysql:
+    container_name: my-mysql
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "123"
+      MYSQL_DATABASE: "mydb"
+    ports:
+      - "3307:3306"
+    restart: always
     
   prometheus:
     image: prom/prometheus:v2.37.6
@@ -34,7 +51,6 @@ services:
   grafana:
     image: grafana/grafana:9.4.7
     container_name: grafana
-    # user: "$GRA_UID:$GRA_GID"
     ports:
       - "3000:3000"
     volumes:
