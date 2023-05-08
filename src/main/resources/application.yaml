@@ -1,11 +1,24 @@
-spring:
-  application:
-    name: interview_app
-    
 server:
   tomcat:
     connection-timeout: 5000
     max-threads: 10
+
+spring:
+  application:
+    name: interview_app
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/mydb
+#    username: root
+#    password: 123
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
 
 management:
   endpoints:
