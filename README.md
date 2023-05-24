@@ -64,3 +64,61 @@ admin / admin
 위와 동일하게 +Import 에서 아래 숫자를 입력하고 Load를 클릭
 
 - 7362
+---
+
+## K6 사용하기(macOS ver)
+1. K6 설치
+```shell
+brew install k6
+```
+
+2. k6 스크립트 작성(기본 예제)
+```javascript
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+    stages: [
+        { duration: '30s', target: 20 },
+        { duration: '1m30s', target: 10 },
+        { duration: '20s', target: 0 },
+    ],
+};
+
+export default function() {
+    const res = http.get('http://localhost:8080/test');
+    check(res, { 'status was 200': (r) => r.status === 200 });
+    sleep(1)
+}
+```
+
+3. 스크립트 실행
+```shell
+k6 run ./generator/traffic.js
+```
+
+### [공식문서](https://k6.io/docs/)
+
+### 로드 밸런서 추가하기
+
+1. docker compose를 활용해, 동일한 was 이미지를 2개 띄우기
+```
+docker compose up --scale app=2
+```
+
+띄워진 컨테이너 확인
+
+![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/fc1af713-da59-4977-849c-085b803a2316)
+
+
+2. 요청을 2번 보냈을때, 로드 밸런싱이 되는지 확인
+
+![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/b5feb147-0a62-47c8-849f-ad0bfaef37f9)
+
+    a. app-2 컨테이너 종료해보기
+    
+    ![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/5765b9f2-aff4-487c-96bf-f3f2686186da)
+
+    b. 다시 요청을 보냈을때 app-1이 요청을 받는지 확인하기
+
+    ![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/8e4e9514-7d57-41db-94e6-c3802f5d4111)
