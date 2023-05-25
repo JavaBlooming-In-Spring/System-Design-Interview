@@ -6,7 +6,7 @@ global:
   external_labels:
     monitor: 'blooming-monitor'       # 기본적으로 붙여줄 라벨
   query_log_file: query_log_file.log # prometheus의 쿼리 로그들을 기록, 없으면 기록안함
-  
+
 rule_files:
   - "rule.yml"  # 파일 위치는 prometheus.yaml 이 있는 곳과 동일 위치
 
@@ -22,3 +22,9 @@ scrape_configs:
     static_configs:
       - targets:
           - "host.docker.internal:8080"
+  - job_name: "mysql"
+    metrics_path: "/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - "host.docker.internal:9104"

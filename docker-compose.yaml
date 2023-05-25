@@ -25,14 +25,26 @@ services:
 
   my-mysql:
     container_name: my-mysql
-    image: mysql
+    image: arm64v8/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "123"
       MYSQL_DATABASE: "mydb"
     ports:
       - "3307:3306"
     restart: always
-    
+
+  mysqld-exporter:
+    image: quay.io/prometheus/mysqld-exporter
+    container_name: mysqld-exporter
+    environment:
+      - DATA_SOURCE_NAME=root:123@(my-mysql:3306)/mydb
+    ports:
+      - "9104:9104"
+    links:
+      - my-mysql
+    depends_on:
+      - my-mysql
+
   prometheus:
     image: prom/prometheus:v2.37.6
     container_name: prometheus
@@ -47,7 +59,7 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
     restart: always
-    
+
   grafana:
     image: grafana/grafana:9.4.7
     container_name: grafana
