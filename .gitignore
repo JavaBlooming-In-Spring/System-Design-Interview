@@ -12,6 +12,7 @@ target/
 
 # IntelliJ
 out/
+bin/
 
 # prometheus
 prometheus/config/**.log

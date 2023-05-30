@@ -64,3 +64,37 @@ admin / admin
 위와 동일하게 +Import 에서 아래 숫자를 입력하고 Load를 클릭
 
 - 7362
+---
+
+## K6 사용하기(macOS ver)
+1. K6 설치
+```shell
+brew install k6
+```
+
+2. k6 스크립트 작성(기본 예제)
+```javascript
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+    stages: [
+        { duration: '30s', target: 20 },
+        { duration: '1m30s', target: 10 },
+        { duration: '20s', target: 0 },
+    ],
+};
+
+export default function() {
+    const res = http.get('http://localhost:8080/test');
+    check(res, { 'status was 200': (r) => r.status === 200 });
+    sleep(1)
+}
+```
+
+3. 스크립트 실행
+```shell
+k6 run ./generator/traffic.js
+```
+
+### [공식문서](https://k6.io/docs/)
