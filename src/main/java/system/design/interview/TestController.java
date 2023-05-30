@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class TestController {
-
     @GetMapping("/test")
     public String test() {
-        log.info("하위");
         return "test";
     }
 }

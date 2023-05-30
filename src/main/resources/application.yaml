@@ -1,6 +1,11 @@
 spring:
   application:
     name: interview_app
+    
+server:
+  tomcat:
+    connection-timeout: 5000
+    max-threads: 10
 
 management:
   endpoints:
