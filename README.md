@@ -23,16 +23,17 @@
 ```
 
 ### 아이디 / 비밀번호
+
 ```
 admin / admin
 ```
 
-### Datasource 추가
+### prometheus Datasource 추가
+
 <img width="1113" alt="image" src="https://user-images.githubusercontent.com/68914294/235339596-397e2623-d884-46f4-9664-7d2479fefd8a.png">
 
 1. 가운데 DATA SOURCES 클릭
 2. Prometheus 클릭
-
 
 <img width="645" alt="image" src="https://user-images.githubusercontent.com/68914294/235339668-4ece0ae2-113a-4b9f-9195-b31778348521.png">
 
@@ -40,6 +41,7 @@ admin / admin
 2. 페이지 하단의 "Save & Test" 클릭
 
 ### JVM Dashboard 추가
+
 <img width="227" alt="image" src="https://user-images.githubusercontent.com/68914294/235339788-7448e251-afd3-49af-84cd-1796b7971415.png">
 
 +Import 클릭
@@ -51,11 +53,17 @@ admin / admin
 
 <img width="629" alt="image" src="https://user-images.githubusercontent.com/68914294/235340098-97307cba-ad30-4e88-a220-01cd319e1d1d.png">
 
- 이 후 Prometheus 선택하고 Import
- 
+이 후 Prometheus 선택하고 Import
+
 ### Result
+
 <img width="2553" alt="image" src="https://user-images.githubusercontent.com/68914294/235340155-0023265b-1144-4072-8fc7-c2066ab65aec.png">
 
+### Mysql Dashboard 추가
+
+위와 동일하게 +Import 에서 아래 숫자를 입력하고 Load를 클릭
+
+- 7362
 ---
 
 ## K6 사용하기(macOS ver)
