@@ -15,16 +15,25 @@ scrape_configs:
     static_configs:
       - targets:
           - "localhost:9090"
+  
   - job_name: "springboot"
     metrics_path: "/actuator/prometheus"
     scheme: 'http'
     scrape_interval: 5s
     static_configs:
       - targets:
-          - "host.docker.internal:8080"
+          - "app:8080"
+  
   - job_name: "mysql"
     metrics_path: "/metrics"
     scrape_interval: 5s
     static_configs:
       - targets:
-          - "host.docker.internal:9104"
+          - "mysqld-exporter:9104"
+  
+  - job_name: "traefik"
+    # metrics_path: /metrics -> default
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - "traefik:8082"

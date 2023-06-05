@@ -1,10 +1,7 @@
 version: "3"
 services:
   app:
-    container_name: app
     image: arm64v8/amazoncorretto:17-alpine-jdk
-    ports:
-      - "8080:8080"
     volumes:
       - ./src:/app/src
       - ./gradle:/app/gradle
@@ -15,11 +12,19 @@ services:
     working_dir: /app
     command: [ "./gradlew", "bootrun" ]
     restart: always
-
+    expose:
+      - "8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.app.loadbalancer.server.port=8080"
+      - "traefik.http.services.app.loadbalancer.healthcheck.path=/actuator/health"
+      - "traefik.http.services.app.loadbalancer.healthcheck.interval=10s"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://my-mysql:3306/mydb
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "123"
+    deploy:
+      replicas: 2
     depends_on:
       - my-mysql
 
@@ -68,3 +73,21 @@ services:
     volumes:
       - ./grafana/volume:/var/lib/grafana
     restart: always
+    
+  traefik:
+    image: traefik:v2.10
+    labels:
+#      - "traefik.enable=true"
+      # Traefik의 내부 API를 사용하여 관리 및 모니터링을 할 수 있도록 설정
+      - "traefik.http.routers.api.service=api@internal"
+    ports:
+      - "80:80"
+      - "8888:8080" # 대시보드를 연결하기 위한 포트 (Optional)
+    volumes:
+      - ./traefik/config/traefik-config.yaml:/etc/traefik/traefik.yml
+      - ./traefik/config/traefik-dynamic.yaml:/traefik-dynamic.yml
+      # Traefik이 도커 환경 내에서 실행 중인 컨테이너를 동적으로 탐지하고 관리하기 위해서 마운트
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    
+    

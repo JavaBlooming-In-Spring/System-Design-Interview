@@ -1,0 +1,48 @@
+## traefik-config.yml
+
+# Providers
+# discover the services that live on your infrastructure (their IP, health, ...)
+
+# Entrypoints
+# listen for incoming traffic (ports, ...)
+
+# Routers
+# analyse the requests (host, path, headers, SSL, ...)
+
+# Services
+# forward the request to your services (load balancing, ...)
+
+# Middlewares
+# may update the request or make decisions based on the request (authentication, rate limiting, headers, ...)
+
+# Docker configuration backend
+# Docs : https://doc.traefik.io/traefik/providers/docker/
+providers:
+  docker:
+    exposedByDefault: false
+    httpClientTimeout: "300"
+    swarmMode: false
+  file:
+    filename: "traefik-dynamic.yml"
+    watch: true
+  
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+  metrics:
+    address: ":8082"
+
+# API and dashboard configuration
+api:
+  insecure: true
+  dashboard: true
+  debug: true
+
+# Metrics configuration
+metrics:
+  prometheus:
+    entryPoint: metrics
+    addEntryPointsLabels: true
+    addServicesLabels: true

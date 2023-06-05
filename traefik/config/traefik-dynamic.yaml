@@ -1,0 +1,14 @@
+# Router configuration
+http:
+  routers:
+    app-test-router:
+      entryPoints:
+        - http
+      rule: "PathPrefix(`/test`)"
+      service: "app@docker"
+
+    app-actuator-router:
+      entryPoints:
+        - http
+      rule: "PathPrefix(`/actuator`)"
+      service: "app@docker"
