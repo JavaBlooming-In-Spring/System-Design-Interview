@@ -115,10 +115,14 @@ docker compose up --scale app=2
 
 ![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/b5feb147-0a62-47c8-849f-ad0bfaef37f9)
 
-    a. app-2 컨테이너 종료해보기
+3. app-2 컨테이너 종료해보기
     
-    ![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/5765b9f2-aff4-487c-96bf-f3f2686186da)
+![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/5765b9f2-aff4-487c-96bf-f3f2686186da)
 
-    b. 다시 요청을 보냈을때 app-1이 요청을 받는지 확인하기
+4. 다시 요청을 보냈을때 app-1이 요청을 받는지 확인하기
 
-    ![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/8e4e9514-7d57-41db-94e6-c3802f5d4111)
+![image](https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/8e4e9514-7d57-41db-94e6-c3802f5d4111)
+
+5. Grafana 확인
+
+<img width="1675" alt="스크린샷 2023-06-10 오후 3 08 28" src="https://github.com/JavaBlooming-In-Spring/System-Design-Interview/assets/76645095/9d164873-a1b0-472b-9e9b-2d090a30e007">
