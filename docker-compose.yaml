@@ -1,10 +1,7 @@
 version: "3"
 services:
   app:
-    container_name: app
     image: arm64v8/amazoncorretto:17-alpine-jdk
-    ports:
-      - "8080:8080"
     volumes:
       - ./src:/app/src
       - ./gradle:/app/gradle
@@ -15,6 +12,8 @@ services:
     working_dir: /app
     command: [ "./gradlew", "bootrun" ]
     restart: always
+    expose:
+      - "8080"
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://my-mysql:3306/mydb
@@ -22,6 +21,13 @@ services:
       SPRING_DATASOURCE_PASSWORD: "123"
     depends_on:
       - my-mysql
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    ports:
+      - "80:80"
 
   my-mysql:
     container_name: my-mysql
