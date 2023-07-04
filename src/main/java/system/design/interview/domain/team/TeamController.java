@@ -1,20 +1,14 @@
 package system.design.interview.domain.team;
 
-import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import system.design.interview.domain.team.dto.request.TeamCreateRequest;
 import system.design.interview.domain.team.dto.request.TeamUpdateRequest;
 import system.design.interview.domain.team.dto.response.TeamResponse;
+
+import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/teams")
@@ -32,6 +26,12 @@ public class TeamController {
     @GetMapping
     public ResponseEntity<List<TeamResponse>> findAll() {
         List<TeamResponse> response = teamService.findAll();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TeamResponse> findById(@PathVariable(name = "id") Long teamId) {
+        TeamResponse response = TeamResponse.from(teamService.findById(teamId));
         return ResponseEntity.ok(response);
     }
 

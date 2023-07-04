@@ -15,6 +15,10 @@ spring:
       hibernate:
         show_sql: true
 
+  data:
+    redis:
+      host: redis
+      port: 6380
 
 management:
   endpoints:
