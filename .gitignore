@@ -20,3 +20,4 @@ prometheus/volume/data/
 
 # grafana
 grafana/
+redis/
