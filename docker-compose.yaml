@@ -14,13 +14,13 @@ services:
     restart: always
     expose:
       - "8080"
-
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://my-mysql:3306/mydb
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "123"
     depends_on:
       - my-mysql
+
   nginx:
     image: nginx:latest
     volumes:
@@ -50,6 +50,20 @@ services:
       - my-mysql
     depends_on:
       - my-mysql
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6380:6380"
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    restart: always
+    command: redis-server /usr/local/conf/redis.conf --port 6380
 
   prometheus:
     image: prom/prometheus:v2.37.6
