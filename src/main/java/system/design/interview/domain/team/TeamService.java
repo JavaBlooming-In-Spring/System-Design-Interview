@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import system.design.interview.domain.team.dto.request.TeamCreateRequest;
 import system.design.interview.domain.team.dto.request.TeamUpdateRequest;
 import system.design.interview.domain.team.dto.response.TeamResponse;
-import system.design.interview.domain.team.exception.TeamException;
 import system.design.interview.domain.team.exception.TeamException.NotFoundTeam;
 
 @RequiredArgsConstructor
@@ -18,7 +17,7 @@ import system.design.interview.domain.team.exception.TeamException.NotFoundTeam;
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private final TeamCacheRepository teamCacheRepository;
+    private final TeamRedisRepository teamRedisRepository;
 
     @Transactional
     public Long createTeam(TeamCreateRequest request) {
@@ -26,7 +25,7 @@ public class TeamService {
                 .name(request.getName())
                 .build();
         Team savedTeam = teamRepository.save(team);
-        teamCacheRepository.save(savedTeam);
+        teamRedisRepository.save(savedTeam.getId(), savedTeam);
         return savedTeam.getId();
     }
 
@@ -42,22 +41,23 @@ public class TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(NotFoundTeam::new);
         team.update(request.getName());
-        teamCacheRepository.save(team);
+        teamRedisRepository.save(teamId, team);
     }
 
     @Transactional
     public void deleteMemberById(Long teamId) {
         teamRepository.deleteById(teamId);
-        teamCacheRepository.deleteById(teamId);
+        teamRedisRepository.deleteById(teamId);
     }
 
     public Team findById(Long teamId) {
-        Optional<Team> cacheTeam = teamCacheRepository.findById(teamId);
+        Optional<Team> cacheTeam = teamRedisRepository.findById(teamId);
+        System.out.println("cacheTeam = " + cacheTeam);
         if (cacheTeam.isPresent()) {
             return cacheTeam.get();
         }
         Team team = teamRepository.findById(teamId).orElseThrow(NotFoundTeam::new);
-        teamCacheRepository.save(team);
+        teamRedisRepository.save(teamId, team);
         return team;
     }
 }

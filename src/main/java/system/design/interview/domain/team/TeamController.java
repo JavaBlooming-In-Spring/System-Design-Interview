@@ -36,11 +36,11 @@ public class TeamController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Void> findTeamById(
+    public ResponseEntity<Team> findTeamById(
             @PathVariable(name = "id") Long teamId
     ) {
-        teamService.findById(teamId);
-        return ResponseEntity.ok().build();
+        Team team = teamService.findById(teamId);
+        return ResponseEntity.ok(team);
     }
 
     @PutMapping("/{id}")

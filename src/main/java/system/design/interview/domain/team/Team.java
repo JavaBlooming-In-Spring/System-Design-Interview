@@ -19,7 +19,6 @@ import system.design.interview.domain.BaseEntity;
 @Table(name = "team")
 @EqualsAndHashCode(of = {"id"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RedisHash("team")
 public class Team extends BaseEntity {
 
     @Id
