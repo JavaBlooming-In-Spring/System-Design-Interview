@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 import system.design.interview.domain.BaseEntity;
 
 @Entity
@@ -18,6 +19,7 @@ import system.design.interview.domain.BaseEntity;
 @Table(name = "team")
 @EqualsAndHashCode(of = {"id"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RedisHash("team")
 public class Team extends BaseEntity {
 
     @Id

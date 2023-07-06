@@ -35,6 +35,14 @@ public class TeamController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Void> findTeamById(
+            @PathVariable(name = "id") Long teamId
+    ) {
+        teamService.findById(teamId);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTeam(
             @PathVariable(name = "id") Long teamId,

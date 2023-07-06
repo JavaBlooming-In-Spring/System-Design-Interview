@@ -21,6 +21,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: "123"
     depends_on:
       - my-mysql
+      - redis
+
   nginx:
     image: nginx:latest
     volumes:
@@ -50,6 +52,12 @@ services:
       - my-mysql
     depends_on:
       - my-mysql
+
+  redis:
+    container_name: my-redis
+    image: redis
+    restart: always
+    command: ["redis-server"]
 
   prometheus:
     image: prom/prometheus:v2.37.6
